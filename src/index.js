@@ -1,11 +1,11 @@
 const express = require("express");
-// require("dotenv").config();
 const bodyParser = require("body-parser");
-
 const { PORT } = require("./config/serverConfig");
-// const CityRepository = require('./repository/city-repository')
 
-const ApiRoutes = require('./routes/index') 
+const db = require("./models/index");
+
+const ApiRoutes = require("./routes/index");
+const { where } = require("sequelize");
 
 const setupAndStartServer = async () => {
   const app = express();
@@ -13,14 +13,41 @@ const setupAndStartServer = async () => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.use('/api',ApiRoutes)
-
+  app.use("/api", ApiRoutes);
 
   app.listen(PORT, async () => {
     console.log(`server started at ${PORT}`);
+    if (process.env.SYNC_DB) {
+      db.sequelize.sync({ alter: true });
+    }
   });
 };
 
 setupAndStartServer();
 
 // "test": "echo \"Error: no test specified\" && exit 1"
+
+// const CityRepository = require('./repository/city-repository')
+// const {City, Airport} = require('./models/index')
+
+// app.listen(PORT, async () => {
+//   console.log(`server started at ${PORT}`);
+// //   const city = await City.findOne({
+// //     where: {
+// //       id:9
+// //     }
+// //   })
+// //   const airports = await city.getAirpots();
+// //   // const newAirport = await Airport.findOne({
+// //   //   where :{
+// //   //     id:5
+// //   //   }
+// //   // })
+// //   // await city.addAirport(newAirport)
+// //   // await city.addAirport({
+// //   //   name: 'Jindal Vijaynagar Airport'
+// //   // })
+
+// //   console.log(city, airports);
+// // });
+// };
