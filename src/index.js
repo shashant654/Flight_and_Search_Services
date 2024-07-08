@@ -1,29 +1,62 @@
+// ___________**************_____________ 
 const express = require("express");
 const bodyParser = require("body-parser");
 const { PORT } = require("./config/serverConfig");
-
 const db = require("./models/index");
-
 const ApiRoutes = require("./routes/index");
-const { where } = require("sequelize");
 
 const setupAndStartServer = async () => {
   const app = express();
-
+  
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-
+  
   app.use("/api", ApiRoutes);
-
+  
   app.listen(PORT, async () => {
-    console.log(`server started at ${PORT}`);
+    console.log(`Server started at ${PORT}`);
     if (process.env.SYNC_DB) {
-      db.sequelize.sync({ alter: true });
+      try {
+        await db.sequelize.sync({ alter: true });
+        console.log('Database synchronized successfully');
+      } catch (error) {
+        console.error('Error synchronizing the database:', error);
+      }
     }
   });
 };
 
 setupAndStartServer();
+
+// ___________**************_____________ 
+// const express = require("express");
+// const bodyParser = require("body-parser");
+// const { PORT } = require("./config/serverConfig");
+
+// const db = require("./models/index");
+
+// const ApiRoutes = require("./routes/index");
+// const { where } = require("sequelize");
+
+// const setupAndStartServer = async () => {
+//   const app = express();
+
+//   app.use(bodyParser.json());
+//   app.use(bodyParser.urlencoded({ extended: true }));
+
+//   app.use("/api", ApiRoutes);
+
+//   app.listen(PORT, async () => {
+//     console.log(`server started at ${PORT}`);
+//     if (process.env.SYNC_DB) {
+//       db.sequelize.sync({ alter: true });
+//     }
+//   });
+// };
+
+// setupAndStartServer();
+// ___________**************_____________ 
+
 
 // "test": "echo \"Error: no test specified\" && exit 1"
 
