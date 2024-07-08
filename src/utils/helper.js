@@ -4,6 +4,6 @@ function compareTime(timeString1, timeString2) {
   return dateTime1.getTime() > dateTIme2.getTime();
 }
 
-// module.exports = {
-//   compareTime,
-// };
+module.exports = {
+  compareTime,
+};
